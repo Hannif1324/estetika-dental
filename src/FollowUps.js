@@ -1,72 +1,76 @@
 // FollowUps.js
-import React, { useState } from 'react';
-import styles from './FollowUps.module.css';
+import React, { useState } from "react";
+import styles from "./FollowUps.module.css";
 
 const FollowUps = ({ data: initialData }) => {
   const [data, setData] = useState(initialData);
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [dateFilter, setDateFilter] = useState('all');
-  const [sortOrder, setSortOrder] = useState('latest');
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("latest");
 
   const handleFollowUp = async (e, user) => {
     e.preventDefault();
 
     try {
-      await fetch('https://bot.kediritechnopark.com/webhook/set-follow-up', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          id: user.id,
-          isfollowup: user.isfollowup ? 'success' : 'followup'
-        })
-      });
+      await fetch(
+        "https://bot.kediritechnopark.com/webhook/estetika-dev/set-follow-up",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: user.id,
+            isfollowup: user.isfollowup ? "success" : "followup",
+          }),
+        }
+      );
 
       if (user.isfollowup) {
-        setData(prev =>
-          prev.map(u =>
+        setData((prev) =>
+          prev.map((u) =>
             u.id === user.id ? { ...u, isfollowup: false, issuccess: true } : u
           )
         );
       } else {
-        setData(prev =>
-          prev.map(u =>
-            u.id === user.id ? { ...u, isfollowup: true } : u
-          )
+        setData((prev) =>
+          prev.map((u) => (u.id === user.id ? { ...u, isfollowup: true } : u))
         );
       }
 
       if (!user.isfollowup) {
-        window.open(`https://api.whatsapp.com/send?phone=${user.contact_info}`, '_blank');
+        window.open(
+          `https://api.whatsapp.com/send?phone=${user.contact_info}`,
+          "_blank"
+        );
       }
     } catch (error) {
-      console.error('Failed to set follow-up:', error);
-      alert('Failed to send follow-up status.');
+      console.error("Failed to set follow-up:", error);
+      alert("Failed to send follow-up status.");
     }
   };
 
   // Filter & Sort
   const now = new Date();
   const filteredData = data
-    .filter(user => {
+    .filter((user) => {
       switch (statusFilter) {
-        case 'pending':
+        case "pending":
           return !user.isfollowup && !user.issuccess;
-        case 'inProgress':
+        case "inProgress":
           return user.isfollowup && !user.issuccess;
-        case 'success':
+        case "success":
           return user.issuccess;
         default:
           return true;
       }
     })
-    .filter(user => {
+    .filter((user) => {
       const created = new Date(user.created_at);
       switch (dateFilter) {
-        case 'today':
+        case "today":
           return created.toDateString() === now.toDateString();
-        case 'week':
+        case "week":
           const aWeekAgo = new Date();
           aWeekAgo.setDate(now.getDate() - 7);
           return created >= aWeekAgo;
@@ -77,7 +81,7 @@ const FollowUps = ({ data: initialData }) => {
     .sort((a, b) => {
       const dateA = new Date(a.created_at);
       const dateB = new Date(b.created_at);
-      return sortOrder === 'latest' ? dateB - dateA : dateA - dateB;
+      return sortOrder === "latest" ? dateB - dateA : dateA - dateB;
     });
 
   return (
@@ -87,10 +91,10 @@ const FollowUps = ({ data: initialData }) => {
         <div className={styles.filterGroup}>
           <div className={styles.filterItem}>
             <label className={styles.filterLabel}>Status</label>
-            <select 
+            <select
               className={styles.filterSelect}
-              value={statusFilter} 
-              onChange={e => setStatusFilter(e.target.value)}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
             >
               <option value="all">All Statuses</option>
               <option value="pending">Pending</option>
@@ -101,10 +105,10 @@ const FollowUps = ({ data: initialData }) => {
 
           <div className={styles.filterItem}>
             <label className={styles.filterLabel}>Period</label>
-            <select 
+            <select
               className={styles.filterSelect}
-              value={dateFilter} 
-              onChange={e => setDateFilter(e.target.value)}
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
             >
               <option value="all">All Time</option>
               <option value="today">Today</option>
@@ -114,10 +118,10 @@ const FollowUps = ({ data: initialData }) => {
 
           <div className={styles.filterItem}>
             <label className={styles.filterLabel}>Sort By</label>
-            <select 
+            <select
               className={styles.filterSelect}
-              value={sortOrder} 
-              onChange={e => setSortOrder(e.target.value)}
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
             >
               <option value="latest">Latest</option>
               <option value="oldest">Oldest</option>
@@ -138,7 +142,7 @@ const FollowUps = ({ data: initialData }) => {
             <p>No data matches the filters</p>
           </div>
         ) : (
-          filteredData.map(user => (
+          filteredData.map((user) => (
             <div key={user.id} className={styles.card}>
               <div className={styles.cardHeader}>
                 <h3 className={styles.userName}>{user.name}</h3>
@@ -152,18 +156,20 @@ const FollowUps = ({ data: initialData }) => {
                   )}
                 </span>
               </div>
-              
+
               <div className={styles.cardContent}>
                 <p className={styles.notes}>{user.notes}</p>
                 <div className={styles.contactInfo}>
                   <span className={styles.contactLabel}>Contact:</span>
-                  <span className={styles.contactValue}>{user.contact_info}</span>
+                  <span className={styles.contactValue}>
+                    {user.contact_info}
+                  </span>
                 </div>
                 <div className={styles.dateInfo}>
-                  {new Date(user.created_at).toLocaleString('id-ID', {
-                    dateStyle: 'medium',
-                    timeStyle: 'short',
-                    timeZone: 'Asia/Jakarta'
+                  {new Date(user.created_at).toLocaleString("id-ID", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                    timeZone: "Asia/Jakarta",
                   })}
                 </div>
               </div>
@@ -171,19 +177,19 @@ const FollowUps = ({ data: initialData }) => {
               <div className={styles.cardActions}>
                 <button
                   className={`${styles.actionBtn} ${
-                    user.issuccess 
-                      ? styles.btnSuccess 
-                      : user.isfollowup 
-                      ? styles.btnComplete 
+                    user.issuccess
+                      ? styles.btnSuccess
+                      : user.isfollowup
+                      ? styles.btnComplete
                       : styles.btnPrimary
                   }`}
                   onClick={(e) => handleFollowUp(e, user)}
                 >
                   {user.issuccess
-                    ? '✓ Follow-up Success'
+                    ? "✓ Follow-up Success"
                     : user.isfollowup
-                    ? '✓ Mark as Complete'
-                    : '💬 Chat on WhatsApp'}
+                    ? "✓ Mark as Complete"
+                    : "💬 Chat on WhatsApp"}
                 </button>
               </div>
             </div>

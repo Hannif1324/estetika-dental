@@ -40,15 +40,21 @@ const ChatBot = ({ existingConversation }) => {
   useEffect(() => {
     if (!localStorage.getItem("session")) {
       function generateUUID() {
-        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-          const r = (Math.random() * 16) | 0;
-          const v = c === "x" ? r : (r & 0x3) | 0x8;
-          return v.toString(16);
-        });
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+          /[xy]/g,
+          function (c) {
+            const r = (Math.random() * 16) | 0;
+            const v = c === "x" ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+          }
+        );
       }
       const sessionId = generateUUID();
       const dateNow = new Date().toISOString();
-      localStorage.setItem("session", JSON.stringify({ sessionId, lastSeen: dateNow }));
+      localStorage.setItem(
+        "session",
+        JSON.stringify({ sessionId, lastSeen: dateNow })
+      );
     }
   }, []);
 
@@ -68,7 +74,10 @@ const ChatBot = ({ existingConversation }) => {
 
     let body;
     let headers;
-    const isBase64Image = type === "image" && typeof content === "string" && content.startsWith("data:image/");
+    const isBase64Image =
+      type === "image" &&
+      typeof content === "string" &&
+      content.startsWith("data:image/");
 
     if (isBase64Image) {
       const file = base64ToFile(content, "photo.jpg");
@@ -94,32 +103,44 @@ const ChatBot = ({ existingConversation }) => {
     }
 
     try {
-      const response = await fetch("https://bot.kediritechnopark.com/webhook/master-agent/ask", {
-        method: "POST",
-        headers,
-        body,
-      });
+      const response = await fetch(
+        "https://bot.kediritechnopark.com/webhook/estetika-dev/ask",
+        {
+          method: "POST",
+          headers,
+          body,
+        }
+      );
       return await response.json();
     } catch (error) {
       if (tryCount < 3) {
         return new Promise((resolve) =>
-          setTimeout(() => resolve(askToBot({ type, content, tryCount: tryCount + 1 })), 3000)
+          setTimeout(
+            () => resolve(askToBot({ type, content, tryCount: tryCount + 1 })),
+            3000
+          )
         );
       } else {
         console.error("Bot unavailable:", error);
-        return { jawaban: "Maaf saya sedang tidak tersedia sekarang, coba lagi nanti" };
+        return {
+          jawaban: "Maaf saya sedang tidak tersedia sekarang, coba lagi nanti",
+        };
       }
     }
   };
 
   const handleUploadImage = async (img) => {
     setSearchParams({});
-    const newMessages = [...messages, { sender: "user", img: img, time: getTime() }];
+    const newMessages = [
+      ...messages,
+      { sender: "user", img: img, time: getTime() },
+    ];
     setMessages(newMessages);
     setIsLoading("Menganalisa gambar anda...");
 
     const data = await askToBot({ type: "image", content: img });
-    const botAnswer = data.jawaban || "Maaf, saya tidak bisa menganalisis gambar tersebut.";
+    const botAnswer =
+      data.jawaban || "Maaf, saya tidak bisa menganalisis gambar tersebut.";
 
     setMessages((prev) => [
       ...prev,
@@ -128,12 +149,20 @@ const ChatBot = ({ existingConversation }) => {
     setIsLoading("");
   };
 
-  const sendMessage = async (textOverride = null, name, phoneNumber, tryCount = 0) => {
+  const sendMessage = async (
+    textOverride = null,
+    name,
+    phoneNumber,
+    tryCount = 0
+  ) => {
     const message = textOverride || input.trim();
     if (message === "") return;
 
     const session = JSON.parse(localStorage.getItem("session"));
-    if ((!session || !session.name || !session.phoneNumber) && messages.length > 2) {
+    if (
+      (!session || !session.name || !session.phoneNumber) &&
+      messages.length > 2
+    ) {
       setIsPoppedUp(message);
       setInput("");
       return;
@@ -141,14 +170,19 @@ const ChatBot = ({ existingConversation }) => {
 
     setHasAnimatedIntro(false);
 
-    const newMessages = [...messages, { sender: "user", text: message, time: getTime() }];
+    const newMessages = [
+      ...messages,
+      { sender: "user", text: message, time: getTime() },
+    ];
     setMessages(newMessages);
     setInput("");
     setIsLoading("Mengetik...");
 
     try {
       const data = await askToBot({ type: "text", content: message, tryCount });
-      const botAnswer = data.jawaban || "Maaf saya sedang tidak tersedia sekarang, coba lagi nanti";
+      const botAnswer =
+        data.jawaban ||
+        "Maaf saya sedang tidak tersedia sekarang, coba lagi nanti";
 
       setMessages((prev) => [
         ...prev,
@@ -168,7 +202,10 @@ const ChatBot = ({ existingConversation }) => {
         ]);
         setIsLoading("");
       } else {
-        setTimeout(() => sendMessage(message, name, phoneNumber, tryCount + 1), 3000);
+        setTimeout(
+          () => sendMessage(message, name, phoneNumber, tryCount + 1),
+          3000
+        );
       }
     }
   };
@@ -203,32 +240,78 @@ const ChatBot = ({ existingConversation }) => {
       <div className={styles.chatBody}>
         {isLoading && (
           <div className={`${styles.messageRow} ${styles.bot}`}>
-            <div className={`${styles.message} ${styles.bot}`}><em>{isLoading}</em></div>
-          </div>
-        )}
-        {messages.slice().reverse().map((msg, index) => (
-          <div key={index} className={`${styles.messageRow} ${styles[msg.sender]}`}>
-            <div className={`${styles.message} ${styles[msg.sender]} ${msg.animated && hasAnimatedIntro ? styles.introAnimation : ""}`}>
-              {msg.sender !== "bot" ? (
-                msg.text ? msg.text : <img style={{ maxHeight: "300px", maxWidth: "240px", borderRadius: "12px" }} src={msg.img} />
-              ) : formatBoldText(msg.text)}
-              {msg.quickReplies && (
-                <div className={styles.quickReplies}>
-                  {msg.quickReplies.map((reply, i) => (
-                    <div key={i} className={styles.quickReply} onClick={() => sendMessage(reply)}>
-                      {reply}
-                    </div>
-                  ))}
-                  <div className={styles.quickReply} onClick={() => setSearchParams({ camera: "open" })} style={{ color: "white", backgroundColor: "#92c43e", display: "flex", flexDirection: "row", alignItems: "center" }}>
-                    <img style={{ marginRight: "5px", height: "14px", filter: "invert(1)" }} src="/camera.png" />
-                    Analisa Gambar
-                  </div>
-                </div>
-              )}
-              <div className={styles.timestamp}>{msg.time}</div>
+            <div className={`${styles.message} ${styles.bot}`}>
+              <em>{isLoading}</em>
             </div>
           </div>
-        ))}
+        )}
+        {messages
+          .slice()
+          .reverse()
+          .map((msg, index) => (
+            <div
+              key={index}
+              className={`${styles.messageRow} ${styles[msg.sender]}`}
+            >
+              <div
+                className={`${styles.message} ${styles[msg.sender]} ${
+                  msg.animated && hasAnimatedIntro ? styles.introAnimation : ""
+                }`}
+              >
+                {msg.sender !== "bot" ? (
+                  msg.text ? (
+                    msg.text
+                  ) : (
+                    <img
+                      style={{
+                        maxHeight: "300px",
+                        maxWidth: "240px",
+                        borderRadius: "12px",
+                      }}
+                      src={msg.img}
+                    />
+                  )
+                ) : (
+                  formatBoldText(msg.text)
+                )}
+                {msg.quickReplies && (
+                  <div className={styles.quickReplies}>
+                    {msg.quickReplies.map((reply, i) => (
+                      <div
+                        key={i}
+                        className={styles.quickReply}
+                        onClick={() => sendMessage(reply)}
+                      >
+                        {reply}
+                      </div>
+                    ))}
+                    <div
+                      className={styles.quickReply}
+                      onClick={() => setSearchParams({ camera: "open" })}
+                      style={{
+                        color: "white",
+                        backgroundColor: "#92c43e",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          marginRight: "5px",
+                          height: "14px",
+                          filter: "invert(1)",
+                        }}
+                        src="/camera.png"
+                      />
+                      Analisa Gambar
+                    </div>
+                  </div>
+                )}
+                <div className={styles.timestamp}>{msg.time}</div>
+              </div>
+            </div>
+          ))}
       </div>
 
       <div className={styles.chatInput}>
@@ -240,41 +323,90 @@ const ChatBot = ({ existingConversation }) => {
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           disabled={!!isLoading}
         />
-        <button onClick={() => sendMessage()} style={{ marginLeft: "-40px" }} disabled={!!isLoading}>
-          <img src="/send.png" alt="Kirim" style={{ height: "20px", filter: "invert(1)" }} />
+        <button
+          onClick={() => sendMessage()}
+          style={{ marginLeft: "-40px" }}
+          disabled={!!isLoading}
+        >
+          <img
+            src="/send.png"
+            alt="Kirim"
+            style={{ height: "20px", filter: "invert(1)" }}
+          />
         </button>
-        <button onClick={() => setSearchParams({ camera: "open" })} disabled={!!isLoading}>
-          <img src="/camera.png" alt="Kamera" style={{ height: "18px", filter: "invert(1)" }} />
+        <button
+          onClick={() => setSearchParams({ camera: "open" })}
+          disabled={!!isLoading}
+        >
+          <img
+            src="/camera.png"
+            alt="Kamera"
+            style={{ height: "18px", filter: "invert(1)" }}
+          />
         </button>
       </div>
 
       {isPoppedUp !== "" && (
         <div className={styles.PopUp}>
           <div className={`${styles.message} ${styles["bot"]}`}>
-            Untuk bisa membantu Anda lebih jauh, boleh saya tahu nama dan nomor telepon Anda? 😊
-            <div className={styles.quickReplies} style={{ flexDirection: "column" }}>
-              <input className={styles.quickReply} placeholder="Nama Lengkapmu" value={name} onChange={(e) => setName(e.target.value)} maxLength={40} />
+            Untuk bisa membantu Anda lebih jauh, boleh saya tahu nama dan nomor
+            telepon Anda? 😊
+            <div
+              className={styles.quickReplies}
+              style={{ flexDirection: "column" }}
+            >
+              <input
+                className={styles.quickReply}
+                placeholder="Nama Lengkapmu"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                maxLength={40}
+              />
               <div className={styles.inputGroup}>
                 <span className={styles.prefix}>+62</span>
-                <input type="text" inputMode="numeric" pattern="[0-9]*" maxLength={11} className={styles.quickReply2} placeholder="Nomor HP" value={phoneNumber} onChange={(e) => /^\d{0,11}$/.test(e.target.value) && setPhoneNumber(e.target.value)} />
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={11}
+                  className={styles.quickReply2}
+                  placeholder="Nomor HP"
+                  value={phoneNumber}
+                  onChange={(e) =>
+                    /^\d{0,11}$/.test(e.target.value) &&
+                    setPhoneNumber(e.target.value)
+                  }
+                />
               </div>
-              <div className={styles.nextButton} onClick={() => {
-                if (name.length > 2 && phoneNumber.length >= 10) {
-                  const sessionData = JSON.parse(localStorage.getItem("session")) || {};
-                  sessionData.name = name;
-                  sessionData.phoneNumber = phoneNumber;
-                  localStorage.setItem("session", JSON.stringify(sessionData));
-                  setIsPoppedUp("");
-                  sendMessage(isPoppedUp);
-                }
-              }}>Lanjut</div>
+              <div
+                className={styles.nextButton}
+                onClick={() => {
+                  if (name.length > 2 && phoneNumber.length >= 10) {
+                    const sessionData =
+                      JSON.parse(localStorage.getItem("session")) || {};
+                    sessionData.name = name;
+                    sessionData.phoneNumber = phoneNumber;
+                    localStorage.setItem(
+                      "session",
+                      JSON.stringify(sessionData)
+                    );
+                    setIsPoppedUp("");
+                    sendMessage(isPoppedUp);
+                  }
+                }}
+              >
+                Lanjut
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {isOpenCamera && (
-        <Camera handleClose={() => setSearchParams({})} handleUploadImage={handleUploadImage} />
+        <Camera
+          handleClose={() => setSearchParams({})}
+          handleUploadImage={handleUploadImage}
+        />
       )}
     </div>
   );

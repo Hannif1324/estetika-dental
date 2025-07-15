@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import styles from './Login.module.css';
+import React, { useState } from "react";
+import styles from "./Login.module.css";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    username: '',
-    password: ''
+    username: "",
+    password: "",
   });
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,26 +17,31 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const loginResponse = await fetch('https://bot.kediritechnopark.com/webhook/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
+      const loginResponse = await fetch(
+        "https://bot.kediritechnopark.com/webhook/login/estetika-dev",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const loginDataRaw = await loginResponse.json();
-      const loginData = Array.isArray(loginDataRaw) ? loginDataRaw[0] : loginDataRaw;
+      const loginData = Array.isArray(loginDataRaw)
+        ? loginDataRaw[0]
+        : loginDataRaw;
 
       if (loginData?.success && loginData?.token) {
-        localStorage.setItem('token', loginData.token);
-        window.location.href = '/dashboard';
+        localStorage.setItem("token", loginData.token);
+        window.location.href = "/dashboard";
       } else {
-        setError(loginData?.message || 'Username atau password salah');
+        setError(loginData?.message || "Username atau password salah");
       }
     } catch (err) {
-      console.error('Login Error:', err);
-      setError('Gagal terhubung ke server');
+      console.error("Login Error:", err);
+      setError("Gagal terhubung ke server");
     }
   };
 
@@ -45,7 +50,9 @@ const Login = () => {
       <div className={styles.loginBox}>
         <img src="/dermalounge.jpg" alt="Logo" className={styles.logo} />
         <h1 className={styles.h1}>Dermalounge AI Admin Login</h1>
-        <p className={styles.subtitle}>Silakan masuk untuk melanjutkan ke dashboard</p>
+        <p className={styles.subtitle}>
+          Silakan masuk untuk melanjutkan ke dashboard
+        </p>
         <form onSubmit={handleSubmit} className={styles.form}>
           <input
             type="text"
@@ -68,9 +75,7 @@ const Login = () => {
             Login
           </button>
         </form>
-        <div className={styles.footer}>
-          &copy; 2025 Dermalounge
-        </div>
+        <div className={styles.footer}>&copy; 2025 Dermalounge</div>
       </div>
     </div>
   );

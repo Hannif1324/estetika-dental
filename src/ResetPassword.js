@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // ⬅️ Tambahkan ini
-import styles from './Login.module.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ⬅️ Tambahkan ini
+import styles from "./Login.module.css";
 
 const ResetPassword = () => {
   const navigate = useNavigate(); // ⬅️ Gunakan ini untuk navigasi
   const [formData, setFormData] = useState({
-    oldPassword: '',
-    newPassword: ''
+    oldPassword: "",
+    newPassword: "",
   });
 
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,39 +18,42 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     if (!token) {
-      setError('Anda belum login. Silakan login terlebih dahulu.');
+      setError("Anda belum login. Silakan login terlebih dahulu.");
       return;
     }
 
     try {
-      const response = await fetch('https://bot.kediritechnopark.com/webhook/reset-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          password: formData.oldPassword,
-          newPassword: formData.newPassword
-        })
-      });
+      const response = await fetch(
+        "https://bot.kediritechnopark.com/webhook/profile-estetika-dev/reset-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            password: formData.oldPassword,
+            newPassword: formData.newPassword,
+          }),
+        }
+      );
 
       const data = await response.json();
       if (data?.success) {
-        setSuccess('Password berhasil diubah');
-        setFormData({ oldPassword: '', newPassword: '' });
+        setSuccess("Password berhasil diubah");
+        setFormData({ oldPassword: "", newPassword: "" });
       } else {
-        setError(data?.message || 'Gagal mereset password');
+        setError(data?.message || "Gagal mereset password");
       }
     } catch (err) {
-      console.error('Reset Error:', err);
-      setError('Gagal terhubung ke server');
+      console.error("Reset Error:", err);
+      setError("Gagal terhubung ke server");
     }
   };
 
@@ -78,7 +81,9 @@ const ResetPassword = () => {
             className={styles.input}
           />
           {error && <p className={styles.error}>{error}</p>}
-          {success && <p style={{ color: 'green', marginBottom: '10px' }}>{success}</p>}
+          {success && (
+            <p style={{ color: "green", marginBottom: "10px" }}>{success}</p>
+          )}
           <button type="submit" className={styles.button}>
             Simpan Password Baru
           </button>
@@ -86,9 +91,9 @@ const ResetPassword = () => {
 
         {/* Tombol kembali */}
         <button
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate("/dashboard")}
           className={styles.button}
-          style={{ marginTop: '12px', backgroundColor: '#777' }}
+          style={{ marginTop: "12px", backgroundColor: "#777" }}
         >
           Kembali ke Dashboard
         </button>
