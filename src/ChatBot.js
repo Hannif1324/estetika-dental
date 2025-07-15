@@ -4,6 +4,7 @@ import Camera from "./Camera";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
 const ChatBot = ({ existingConversation }) => {
+  const [visibleReplies, setVisibleReplies] = useState(0);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState("");
@@ -36,6 +37,18 @@ const ChatBot = ({ existingConversation }) => {
       setHasAnimatedIntro(true);
     }
   }, [existingConversation]);
+
+  useEffect(() => {
+    if (hasAnimatedIntro) {
+      let index = 0;
+      const interval = setInterval(() => {
+        index++;
+        setVisibleReplies(index);
+        if (index >= 4) clearInterval(interval);
+      }, 400);
+      return () => clearInterval(interval);
+    }
+  }, [hasAnimatedIntro]);
 
   useEffect(() => {
     if (!localStorage.getItem("session")) {
@@ -281,6 +294,14 @@ const ChatBot = ({ existingConversation }) => {
                         key={i}
                         className={styles.quickReply}
                         onClick={() => sendMessage(reply)}
+                        style={{
+                          opacity: visibleReplies > i ? 1 : 0,
+                          transform:
+                            visibleReplies > i
+                              ? "translateY(0)"
+                              : "translateY(10px)",
+                          transition: "all 0.3s ease",
+                        }}
                       >
                         {reply}
                       </div>
@@ -294,6 +315,12 @@ const ChatBot = ({ existingConversation }) => {
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
+                        opacity: visibleReplies > 2 ? 1 : 0,
+                        transform:
+                          visibleReplies > 2
+                            ? "translateY(0)"
+                            : "translateY(10px)",
+                        transition: "all 2.3s ease",
                       }}
                     >
                       <img

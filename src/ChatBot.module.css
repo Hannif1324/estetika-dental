@@ -130,6 +130,11 @@
   gap: 8px;
   margin: 10px 0 0;
 }
+
+.quickReply {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
 .inputGroup {
   display: flex;
   align-items: center;
