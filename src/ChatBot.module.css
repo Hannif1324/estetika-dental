@@ -19,7 +19,7 @@
     justify-content: center;
 }
 .chatHeader {
-  background: #075e54;
+  background: #eca415f6;
   color: #fff;
   padding: 15px;
   display: flex;
@@ -107,17 +107,20 @@
 }
 
 .chatInput button {
-  background: #075e54;
+  background: #92c43e;
   color: #fff;
   border: none;
   border-radius: 20px;
   padding: 0 20px;
   margin-left: 10px;
   cursor: pointer;
+  border: 2px solid transparent; 
+  transition: all 0.2s ease-in-out;
 }
 
 .chatInput button:hover {
-  background: #0b7366;
+  background: #a1d34a;
+  border-color: black;
 }
 
 .quickReplies {
@@ -149,14 +152,13 @@
   border-radius: 20px;
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  /* transition: all 0.2s ease; */
+  transition: all 0.2s ease-in-out;
 }
 
-/* .quickReply:hover {
-  background: #075e54;
-  color: white;
-  border-color: #075e54;
-} */
+.quickReply:hover {
+  border-color: #000000;
+}
 
 /* .quickReply:hover::placeholder {
   color: white;
@@ -187,6 +189,23 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
+.introAnimation {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 
 /* .quickReply2:hover {
   background: #075e54;
