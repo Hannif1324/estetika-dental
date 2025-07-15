@@ -352,7 +352,12 @@ const ChatBot = ({ existingConversation }) => {
         />
         <button
           onClick={() => sendMessage()}
-          style={{ marginLeft: "-40px" }}
+          style={{
+            marginLeft: "-40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
           disabled={!!isLoading}
         >
           <img
@@ -363,6 +368,12 @@ const ChatBot = ({ existingConversation }) => {
         </button>
         <button
           onClick={() => setSearchParams({ camera: "open" })}
+          style={{
+            // marginLeft: "-40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
           disabled={!!isLoading}
         >
           <img

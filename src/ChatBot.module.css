@@ -108,6 +108,8 @@
 }
 
 .chatInput button {
+  width: 54px;
+  height: 38px;
   background: #92c43e;
   color: #fff;
   border: none;
