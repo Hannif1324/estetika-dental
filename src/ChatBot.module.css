@@ -1,22 +1,23 @@
 .chatContainer {
-    height: 100%;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px #0003;
-    display: flex;
-    flex-direction: column;
-    max-width: 500px;
-    overflow: auto;
-    position: relative;
+  height: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px #0003;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  min-width: 320px;
+  overflow: auto;
+  position: relative;
 }
 
-.PopUp{
-    background-color: #555454ab;
-    position: absolute;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.PopUp {
+  background-color: #555454ab;
+  position: absolute;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .chatHeader {
   background: #eca415f6;
@@ -114,7 +115,7 @@
   padding: 0 20px;
   margin-left: 10px;
   cursor: pointer;
-  border: 2px solid transparent; 
+  border: 2px solid transparent;
   transition: all 0.2s ease-in-out;
 }
 
@@ -204,8 +205,6 @@
     transform: translateY(0);
   }
 }
-
-
 
 /* .quickReply2:hover {
   background: #075e54;
