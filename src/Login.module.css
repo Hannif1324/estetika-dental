@@ -4,19 +4,29 @@
   justify-content: center;
   height: 100vh;
   width: 100vw;
-  position: relative; /* GANTI INI: agar background bisa absolute */
-  overflow: hidden;    /* TAMBAH INI: mencegah overflow bg */
+  position: relative; 
+  overflow: hidden; 
 }
 
 .loginBox {
-  background: rgba(255, 255, 255, 0.9); /* GANTI INI: biar tembus pandang */
+  position: relative;
+  background: rgba(255, 255, 255, 0); 
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 100%;
-  z-index: 2; /* TAMBAH INI: agar berada di atas background */
-  backdrop-filter: blur(15px); /* TAMBAH efek buram */
+  max-width: 400px;
+  z-index: 1; 
+  overflow: hidden; 
+}
+.logo,
+.h1,
+.subtitle,
+.form,
+.footer {
+  position: relative; 
+  z-index: 2;
 }
 
 .logo {
@@ -64,7 +74,6 @@
 }
 
 .button:hover {
-  /* background-color: #3c9a9f; */
   background-color: #444;
   transform: scale(1.03);
   transition: all 0.3s ease;

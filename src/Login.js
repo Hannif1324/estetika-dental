@@ -49,8 +49,9 @@ const Login = () => {
 
   return (
     <div className={styles.loginContainer}>
-      <DentalBackground />
       <div className={styles.loginBox}>
+        <DentalBackground />
+
         <img src="/dentalLogin.jpg" alt="Logo" className={styles.logo} />
         <h1 className={styles.h1}>Estetika Dental AI Admin Login</h1>
         <p className={styles.subtitle}>
