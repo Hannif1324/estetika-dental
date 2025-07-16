@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Login.module.css";
 
-import DentalBackground from "./DentalBackground";
+import LoginBackground from "./LoginBackground";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -50,7 +50,7 @@ const Login = () => {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginBox}>
-        <DentalBackground />
+        <LoginBackground />
 
         <img src="/dentalLogin.jpg" alt="Logo" className={styles.logo} />
         <h1 className={styles.h1}>Estetika Dental AI Admin Login</h1>
