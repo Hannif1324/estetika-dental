@@ -3,18 +3,20 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: #f0f2f5;
   width: 100vw;
+  position: relative; /* GANTI INI: agar background bisa absolute */
+  overflow: hidden;    /* TAMBAH INI: mencegah overflow bg */
 }
 
 .loginBox {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.9); /* GANTI INI: biar tembus pandang */
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 100%;
-  max-width: 400px;
+  z-index: 2; /* TAMBAH INI: agar berada di atas background */
+  backdrop-filter: blur(15px); /* TAMBAH efek buram */
 }
 
 .logo {
@@ -48,7 +50,7 @@
 }
 
 .button {
-  background-color: #337f83;
+  background-color: #000000;
   color: white;
   border: none;
   padding: 12px;
@@ -57,8 +59,15 @@
   cursor: pointer;
 }
 
+.button:active {
+  transform: scale(0.97);
+}
+
 .button:hover {
-  background-color: #3c9a9f;
+  /* background-color: #3c9a9f; */
+  background-color: #444;
+  transform: scale(1.03);
+  transition: all 0.3s ease;
 }
 
 .error {
@@ -69,5 +78,5 @@
 .footer {
   margin-top: 20px;
   font-size: 12px;
-  color: #aaa;
+  color: #666666;
 }
