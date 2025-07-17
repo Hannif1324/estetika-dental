@@ -1,0 +1,60 @@
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/public/dentalBg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.55;
+  z-index: 0;
+  animation: bgMotionZoom 19s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+@keyframes bgMotionZoom {
+  0% {
+    background-position: center center;
+    transform: scale(1);
+  }
+  30% {
+    background-position: 10% center;
+    transform: scale(1);
+  }
+  40% {
+    background-position: center center;
+    transform: scale(1);
+  }
+  50% {
+    background-position: 90% center;
+    transform: scale(1);
+  }
+  60% {
+    background-position: center center;
+    transform: scale(1);
+  }
+  80% {
+    background-position: center center;
+    transform: scale(1.1);
+  }
+  90% {
+    background-position: center center;
+    transform: scale(1);
+  }
+  97% {
+    background-position: center center;
+    transform: scale(1);
+  }
+  100% {
+    background-position: center center;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 320px) {
+  .background {
+    background-position: top center;
+  }
+}

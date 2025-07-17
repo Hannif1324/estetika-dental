@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styles from "./Login.module.css";
 
+import LoginBackground from "./LoginBackground";
+
 const Login = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -48,8 +50,10 @@ const Login = () => {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginBox}>
-        <img src="/dermalounge.jpg" alt="Logo" className={styles.logo} />
-        <h1 className={styles.h1}>Dermalounge AI Admin Login</h1>
+        <LoginBackground />
+
+        <img src="/dentalLogin.jpg" alt="Logo" className={styles.logo} />
+        <h1 className={styles.h1}>Estetika Dental AI Admin Login</h1>
         <p className={styles.subtitle}>
           Silakan masuk untuk melanjutkan ke dashboard
         </p>
@@ -75,7 +79,7 @@ const Login = () => {
             Login
           </button>
         </form>
-        <div className={styles.footer}>&copy; 2025 Dermalounge</div>
+        <div className={styles.footer}>&copy; 2025 Estetika Dental</div>
       </div>
     </div>
   );
