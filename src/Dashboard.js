@@ -589,6 +589,9 @@ const Dashboard = () => {
       );
 
       if (response.ok) {
+        const data = await response.json();
+        console.log("Data dari MongoDB:", data);
+
         alert("Pengetahuan berhasil diperbarui.");
       } else {
         alert(`Gagal memperbarui pengetahuan AI`);
