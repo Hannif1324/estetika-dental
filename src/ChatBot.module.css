@@ -18,9 +18,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 20;
 }
 .chatHeader {
-  background: #eca415f6;
+  background: #ff9800;
   color: #fff;
   padding: 15px;
   display: flex;
@@ -28,12 +29,16 @@
   gap: 10px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  position: relative;
+  z-index: 2;
 }
 
 .chatHeader img {
   width: 45px;
   height: 45px;
   border-radius: 50%;
+  position: relative;
+  z-index: 2;
 }
 
 .chatBody {
@@ -43,6 +48,8 @@
   background: #ece5dd;
   display: flex;
   flex-direction: column-reverse;
+  z-index: 2;
+  position: relative;
 }
 
 .messageRow {
@@ -54,10 +61,14 @@
 
 .bot {
   justify-content: flex-start;
+  position: relative;
+  z-index: 2;
 }
 
 .user {
   justify-content: flex-end;
+  position: relative;
+  z-index: 2;
 }
 
 .message {
@@ -72,10 +83,14 @@
 .message.bot {
   background: #ffffff;
   border: 1px solid #ccc;
+  position: relative;
+  z-index: 2;
 }
 
 .message.user {
   background: #dcf8c6;
+  position: relative;
+  z-index: 2;
 }
 
 .timestamp {
@@ -83,6 +98,8 @@
   color: #555;
   margin-top: 4px;
   text-align: right;
+  position: relative;
+  z-index: 2;
 }
 
 .avatar {
@@ -90,6 +107,8 @@
   height: 36px;
   border-radius: 50%;
   margin: 0 8px;
+  position: relative;
+  z-index: 2;
 }
 
 .chatInput {
@@ -97,6 +116,8 @@
   padding: 10px;
   border-top: 1px solid #ddd;
   background: #f0f0f0;
+  position: relative;
+  z-index: 2;
 }
 
 .chatInput input {
@@ -105,6 +126,8 @@
   border-radius: 20px;
   border: 1px solid #ccc;
   font-size: 14px;
+  position: relative;
+  z-index: 2;
 }
 
 .chatInput button {
@@ -119,11 +142,15 @@
   cursor: pointer;
   border: 2px solid transparent;
   transition: all 0.2s ease-in-out;
+  position: relative;
+  z-index: 2;
 }
 
 .chatInput button:hover {
   background: #a1d34a;
   border-color: black;
+  position: relative;
+  z-index: 2;
 }
 
 .quickReplies {
@@ -141,6 +168,8 @@
   display: flex;
   align-items: center;
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .prefix {
@@ -151,6 +180,8 @@
   color: #555;
   border: 1px solid #ccc;
   border-right: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .quickReply {
@@ -160,7 +191,6 @@
   border-radius: 20px;
   font-size: 13px;
   cursor: pointer;
-  /* transition: all 0.2s ease; */
   transition: all 0.2s ease-in-out;
 }
 
@@ -181,10 +211,14 @@
   cursor: pointer;
   transition: all 0.2s ease;
   color: white;
+  position: relative;
+  z-index: 2;
 }
 
 .nextButton:hover::placeholder {
   color: #ccc;
+  position: relative;
+  z-index: 2;
 }
 .quickReply2 {
   width: 100%;
@@ -200,6 +234,8 @@
 
 .introAnimation {
   animation: fadeInUp 0.8s ease-out forwards;
+  position: relative;
+  z-index: 2;
 }
 
 @keyframes fadeInUp {

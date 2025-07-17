@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./ChatBot.module.css";
 import Camera from "./Camera";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import ChatBotBackground from "./ChatBotBackground";
 
 const ChatBot = ({ existingConversation }) => {
   const [visibleReplies, setVisibleReplies] = useState(0);
@@ -251,6 +252,7 @@ const ChatBot = ({ existingConversation }) => {
       </div>
 
       <div className={styles.chatBody}>
+        <ChatBotBackground />
         {isLoading && (
           <div className={`${styles.messageRow} ${styles.bot}`}>
             <div className={`${styles.message} ${styles.bot}`}>

@@ -1,0 +1,21 @@
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/public/ChatBotBg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.1;
+  z-index: 0;
+  /* animation: bgMotionZoom 19s ease-in-out infinite;
+    transform-origin: center center; */
+}
+
+@media (max-width: 320px) {
+  .background {
+    background-position: top center;
+  }
+}
