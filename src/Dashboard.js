@@ -632,9 +632,9 @@ const Dashboard = () => {
             </div>
           )}
         </div>
-        <img src="/dermalounge.jpg" alt="Bot Avatar" />
+        <img src="/dental1.jpg" alt="Bot Avatar" />
         <div>
-          <h1 className={styles.h1}>Dermalounge AI Admin Dashboard</h1>
+          <h1 className={styles.h1}>Estetika Dental AI Admin Dashboard</h1>
         </div>
       </div>
 
