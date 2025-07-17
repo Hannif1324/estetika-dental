@@ -577,6 +577,7 @@ const Dashboard = () => {
     if (!window.confirm(`Yakin ingin mengupdate pengetahuan AI?`)) return;
 
     const token = localStorage.getItem("token");
+
     try {
       const response = await fetch(
         `https://bot.kediritechnopark.com/webhook/estetika-dev/files/push`,
@@ -589,12 +590,15 @@ const Dashboard = () => {
       );
 
       if (response.ok) {
+        const result = await response.json(); // ← data hasil scraping
+        console.log("Hasil scraping:", result);
         alert("Pengetahuan berhasil diperbarui.");
+        // Lalu tampilkan ke UI, misal simpan ke state
       } else {
-        alert(`Gagal memperbarui pengetahuan AI`);
+        alert("Gagal memperbarui pengetahuan AI");
       }
     } catch (err) {
-      alert(`Gagal memperbarui pengetahuan AI`);
+      alert("Terjadi kesalahan saat update");
     }
   };
 
