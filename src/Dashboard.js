@@ -573,43 +573,76 @@ const Dashboard = () => {
     }
   };
 
-  const handleBatchPush = async () => {
-    if (!window.confirm(`Yakin ingin mengupdate pengetahuan AI?`)) return;
+  // const handleBatchPush = async () => {
+  //   if (!window.confirm(`Yakin ingin mengupdate pengetahuan AI?`)) return;
 
-    const token = localStorage.getItem("token");
+  //   const token = localStorage.getItem("token");
 
+  //   try {
+  //     const response = await fetch(
+  //       `https://bot.kediritechnopark.com/webhook/estetika-dev/files/push`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.ok) {
+  //       alert("Permintaan update dikirim, tunggu hasil scraping...");
+
+  //       // Tunggu beberapa detik agar n8n selesai scraping
+  //       setTimeout(async () => {
+  //         const resultResp = await fetch(
+  //           `https://bot.kediritechnopark.com/webhook/estetika-dev/files/result`, // asumsi ini endpoint GET hasil
+  //           {
+  //             method: "GET",
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //             },
+  //           }
+  //         );
+
+  //         if (resultResp.ok) {
+  //           const data = await resultResp.json();
+  //           console.log("Data hasil scraping:", data);
+  //           setScrapingResult(data); // → simpan ke state untuk ditampilkan di UI
+  //         } else {
+  //           alert("Gagal mengambil hasil scraping dari server.");
+  //         }
+  //       }, 5000); // tunggu 5 detik
+  //     } else {
+  //       alert("Gagal mengirim permintaan update.");
+  //     }
+  //   } catch (err) {
+  //     alert("Terjadi kesalahan saat mengupdate.");
+  //   }
+  // };
+
+  const handleScrapeTrigger = async () => {
     try {
       const response = await fetch(
-        `https://bot.kediritechnopark.com/webhook/estetika-dev/files/push`,
+        "https://auto.apps.kediritechnopark.com/webhook/firecrawl-crawl",
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            // Tambahkan token jika diperlukan
+            // Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify({ trigger: true }), // bisa kirim data jika mau
         }
       );
 
-      if (response.ok) {
-        const result = await response.json(); // ← data hasil scraping
-        console.log("Hasil scraping:", result);
-        alert("Pengetahuan berhasil diperbarui.");
-        // Lalu tampilkan ke UI, misal simpan ke state
-      } else {
-        alert("Gagal memperbarui pengetahuan AI");
-      }
-    } catch (err) {
-      alert("Terjadi kesalahan saat update");
+      const result = await response.json();
+      console.log(result);
+      alert("Scraping berhasil dijalankan.");
+    } catch (error) {
+      console.error("Scraping gagal", error);
+      alert("Gagal menjalankan scraping.");
     }
   };
-
-  // ⬇️ Jika masih loading, tampilkan full white screen
-  if (loading) {
-    return (
-      <div
-        style={{ backgroundColor: "white", width: "100vw", height: "100vh" }}
-      />
-    );
-  }
 
   return (
     <div className={styles.dashboardContainer}>
@@ -680,7 +713,7 @@ const Dashboard = () => {
             🗑️ Delete
           </button>
           {updateDetected && (
-            <button onClick={handleBatchPush}>🔄 Update</button>
+            <button onClick={handleScrapeTrigger}>🔄 Update</button>
           )}
         </div>
 
