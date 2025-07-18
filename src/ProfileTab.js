@@ -114,7 +114,7 @@ const ProfileTab = () => {
       }
 
       const response = await fetch(
-        "https://bot.kediritechnopark.com/webhook/profile/estetika-dev",
+        "https://auto.apps.kediritechnopark.com/webhook/profile-estetika-dev/reset-password",
         {
           method: "PUT",
           headers: {

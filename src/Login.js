@@ -20,7 +20,7 @@ const Login = () => {
 
     try {
       const loginResponse = await fetch(
-        "https://bot.kediritechnopark.com/webhook/login/estetika-dev",
+        "https://auto.apps.kediritechnopark.com/webhook/login/estetika-dev",
         {
           method: "POST",
           headers: {
