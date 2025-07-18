@@ -51,7 +51,7 @@ const ProfileTab = () => {
 
       try {
         const response = await fetch(
-          "https://bot.kediritechnopark.com/webhook/estetika-dev/dashboard",
+          "https://auto.apps.kediritechnopark.com/webhook/estetika-dev/dashboard",
           {
             method: "POST",
             headers: {

@@ -176,7 +176,7 @@ const Dashboard = () => {
 
       try {
         const response = await fetch(
-          "https://bot.kediritechnopark.com/webhook/estetika-dev/dashboard",
+          "https://auto.apps.kediritechnopark.com/webhook/estetika-dev/dashboard",
           {
             method: "POST",
             headers: {
@@ -284,7 +284,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
 
     await fetch(
-      "https://bot.kediritechnopark.com/webhook/subscribe/estetika-dev",
+      "https://auto.apps.kediritechnopark.com/webhook/subscribe/estetika-dev",
       {
         method: "POST",
         body: JSON.stringify({ subscription }),

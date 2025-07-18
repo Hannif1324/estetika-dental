@@ -118,7 +118,7 @@ const ChatBot = ({ existingConversation }) => {
 
     try {
       const response = await fetch(
-        "https://bot.kediritechnopark.com/webhook/estetika-dev/ask",
+        "https://auto.apps.kediritechnopark.com/webhook/estetika-dev/ask",
         {
           method: "POST",
           headers,
