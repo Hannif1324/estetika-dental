@@ -2,7 +2,7 @@
 .dashboardContainer {
   max-width: 900px;
   margin: 30px auto;
-  background: #fff;
+  background: #f0f0f0;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   padding: 20px;
@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  background: #075e54;
+  background: linear-gradient(317deg, #6a85b6, #bac8e0);
   color: white;
   padding: 20px;
   border-radius: 10px 10px 0 0;
@@ -24,7 +24,6 @@
   height: 75px;
   border-radius: 50%;
 }
-
 
 /* Profile Section */
 .profileSection {
@@ -68,7 +67,7 @@
 }
 
 .licenseCard {
-  background: linear-gradient(135deg, #075e54, #128c7e);
+  background: linear-gradient(135deg, #6a85b6, #bac8e0);
   color: white;
   padding: 16px;
   border-radius: 12px;
@@ -149,8 +148,8 @@
   position: relative;
   display: inline-block;
   position: absolute;
-    bottom: 5px;
-    right: 5px;
+  bottom: 5px;
+  right: 5px;
 }
 
 .dropdownToggle {
@@ -169,7 +168,7 @@
   background-color: white;
   border: 1px solid #ccc;
   min-width: 160px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   z-index: 1;
   border-radius: 4px;
 }
@@ -186,7 +185,6 @@
 .dropdownItem:hover {
   background-color: #f0f0f0;
 }
-
 
 /* Input Profil */
 .profileForm {
@@ -222,21 +220,20 @@
   color: #777;
 }
 
-
 /* Mobile styles */
 @media (max-width: 768px) {
-.h1 {
-  color: white;
-  font-size: 23px;
-}
-.dashboardContainer {
-  max-width: 900px;
-  margin: 30px auto;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: none;
-  padding: 20px;
-}
+  .h1 {
+    color: white;
+    font-size: 23px;
+  }
+  .dashboardContainer {
+    max-width: 900px;
+    margin: 30px auto;
+    background: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: none;
+    padding: 20px;
+  }
 
   .desktopText {
     display: none;

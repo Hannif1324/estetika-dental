@@ -162,9 +162,9 @@ const ProfileTab = () => {
             </div>
           )}
         </div>
-        <img src={profile?.image || "/no-brand.jpg"} alt="Bot Avatar" />
+        <img src={profile?.image || "dental1.jpg"} alt="Bot Avatar" />
         <div>
-          <h1 className={styles.h1}>Dermalounge AI Admin Profile</h1>
+          <h1 className={styles.h1}>Estetika Dental AI Admin Profile</h1>
         </div>
       </div>
 
