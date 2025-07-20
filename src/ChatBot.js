@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ChatBot.module.css";
-import Camera from "./Camera";
+import CameraModal from "./Camera";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import ChatBotBackground from "./ChatBotBackground";
 
@@ -442,12 +442,11 @@ const ChatBot = ({ existingConversation }) => {
         </div>
       )}
 
-      {isOpenCamera && (
-        <Camera
-          handleClose={() => setSearchParams({})}
-          handleUploadImage={handleUploadImage}
-        />
-      )}
+      <CameraModal
+        isOpen={isOpenCamera}
+        onClose={() => setSearchParams({})}
+        onUpload={handleUploadImage}
+      />
     </div>
   );
 };

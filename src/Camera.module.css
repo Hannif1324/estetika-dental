@@ -1,0 +1,27 @@
+.buttonGreen {
+  background-color: #8bc34a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.buttonGreen:hover {
+  background-color: #7cb342;
+  transform: scale(1.05);
+}
+
+.buttonYellow {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.buttonYellow:hover {
+  background-color: #ffb300;
+  transform: scale(1.05);
+  border-color: #000000;
+}
