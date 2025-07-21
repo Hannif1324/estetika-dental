@@ -78,6 +78,9 @@
   font-size: 14px;
   position: relative;
   line-height: 1.4;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .message.bot {
