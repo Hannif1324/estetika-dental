@@ -30,7 +30,7 @@ const ResetPassword = () => {
 
     try {
       const response = await fetch(
-        "https://bot.kediritechnopark.com/webhook/profile-estetika-dev/reset-password",
+        "https://auto.apps.kediritechnopark.com/webhook/profile-estetika-dev/reset-password",
         {
           method: "POST",
           headers: {

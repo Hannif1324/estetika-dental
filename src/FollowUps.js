@@ -13,7 +13,7 @@ const FollowUps = ({ data: initialData }) => {
 
     try {
       await fetch(
-        "https://bot.kediritechnopark.com/webhook/estetika-dev/set-follow-up",
+        "https://auto.apps.kediritechnopark.com/webhook/estetika-dev/set-follow-up",
         {
           method: "POST",
           headers: {

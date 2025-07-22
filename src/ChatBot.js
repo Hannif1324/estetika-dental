@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ChatBot.module.css";
-import Camera from "./Camera";
+import CameraModal from "./Camera";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import ChatBotBackground from "./ChatBotBackground";
 
 const ChatBot = ({ existingConversation }) => {
   const [visibleReplies, setVisibleReplies] = useState(0);
@@ -117,7 +118,7 @@ const ChatBot = ({ existingConversation }) => {
 
     try {
       const response = await fetch(
-        "https://bot.kediritechnopark.com/webhook/estetika-dev/ask",
+        "https://auto.apps.kediritechnopark.com/webhook/estetika-dev/ask",
         {
           method: "POST",
           headers,
@@ -251,6 +252,7 @@ const ChatBot = ({ existingConversation }) => {
       </div>
 
       <div className={styles.chatBody}>
+        <ChatBotBackground />
         {isLoading && (
           <div className={`${styles.messageRow} ${styles.bot}`}>
             <div className={`${styles.message} ${styles.bot}`}>
@@ -440,12 +442,11 @@ const ChatBot = ({ existingConversation }) => {
         </div>
       )}
 
-      {isOpenCamera && (
-        <Camera
-          handleClose={() => setSearchParams({})}
-          handleUploadImage={handleUploadImage}
-        />
-      )}
+      <CameraModal
+        isOpen={isOpenCamera}
+        onClose={() => setSearchParams({})}
+        onUpload={handleUploadImage}
+      />
     </div>
   );
 };

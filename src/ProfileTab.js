@@ -51,7 +51,7 @@ const ProfileTab = () => {
 
       try {
         const response = await fetch(
-          "https://bot.kediritechnopark.com/webhook/estetika-dev/dashboard",
+          "https://auto.apps.kediritechnopark.com/webhook/estetika-dev/dashboard",
           {
             method: "POST",
             headers: {
@@ -114,7 +114,7 @@ const ProfileTab = () => {
       }
 
       const response = await fetch(
-        "https://bot.kediritechnopark.com/webhook/profile/estetika-dev",
+        "https://auto.apps.kediritechnopark.com/webhook/profile-estetika-dev/reset-password",
         {
           method: "PUT",
           headers: {
@@ -162,9 +162,9 @@ const ProfileTab = () => {
             </div>
           )}
         </div>
-        <img src={profile?.image || "/no-brand.jpg"} alt="Bot Avatar" />
+        <img src={profile?.image || "dental1.jpg"} alt="Bot Avatar" />
         <div>
-          <h1 className={styles.h1}>Dermalounge AI Admin Profile</h1>
+          <h1 className={styles.h1}>Estetika Dental AI Admin Profile</h1>
         </div>
       </div>
 

@@ -1,102 +1,82 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import styles from './Camera.module.css';
 
-const CameraPage = ({ handleClose, handleUploadImage }) => {
+const CameraModal = ({ isOpen, onClose, onUpload }) => {
+  const [flashOn, setFlashOn] = useState(false);
   const [image, setImage] = useState(null);
   const [isCameraActive, setIsCameraActive] = useState(true);
-  const [uploading, setUploading] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isUploadedFile, setIsUploadedFile] = useState(false); // ✅ NEW STATE
+  const [isUploadedFile, setIsUploadedFile] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+    if (!isOpen) return;
+    startCamera();
+
+    return () => {
+      if (videoRef.current?.srcObject) {
+        videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+      }
     };
-
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-useEffect(() => {
-  let stream;
+  }, [isOpen]);
 
   const startCamera = async () => {
     try {
-      stream = await navigator.mediaDevices.getUserMedia({
+      const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment' },
       });
-
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
-    } catch (error) {
-      console.error('Error accessing camera:', error);
+    } catch (err) {
+      console.error('Camera access error:', err);
     }
   };
-
-  startCamera();
-
-  // Clean-up logic (seperti socket.off)
-  return () => {
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
-    }
-  };
-}, []);
-
 
   const captureImage = () => {
     const canvas = canvasRef.current;
     const video = videoRef.current;
 
-    if (video && canvas) {
+    if (canvas && video) {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-
       const ctx = canvas.getContext('2d');
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      const capturedImage = canvas.toDataURL('image/jpeg');
-      setImage(capturedImage);
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      setImage(dataUrl);
       setIsCameraActive(false);
-      setIsUploadedFile(false); // ✅ from camera
+      setIsUploadedFile(false);
     }
   };
 
-  const handleFileUpload = e => {
+  const toggleFlash = () => {
+    setFlashOn(prev => !prev);
+    const track = videoRef.current?.srcObject?.getVideoTracks?.()[0];
+    if (track && track.getCapabilities().torch) {
+      track.applyConstraints({
+        advanced: [{ torch: !flashOn }]
+      }).catch(e => console.warn("Flash not supported:", e));
+    }
+  };
+
+
+  const handleFileUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-        setIsCameraActive(false);
-        setIsUploadedFile(true); // ✅ from file
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+      setIsCameraActive(false);
+      setIsUploadedFile(true);
+    };
+    reader.readAsDataURL(file);
   };
 
-  const cancelCapture = () => {
+  const resetCapture = () => {
     setImage(null);
     setIsCameraActive(true);
-    setIsUploadedFile(false); // ✅ reset
-
-    const startCamera = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment' },
-        });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (error) {
-        console.error('Error accessing camera:', error);
-      }
-    };
+    setIsUploadedFile(false);
     startCamera();
   };
 
@@ -104,92 +84,50 @@ useEffect(() => {
     fileInputRef.current?.click();
   };
 
-  const mainContent = (
-    <div style={containerStyle}>
-      <div style={cameraContainerStyle}>
-        {isCameraActive && (
-          <video ref={videoRef} autoPlay playsInline style={videoStyle} />
-        )}
+  if (!isOpen) return null;
 
-        {!isCameraActive && image && (
-          <img
-            src={image}
-            alt="Captured or Uploaded"
-            style={{
-              ...imageStyle,
-              objectFit: isUploadedFile ? 'contain' : 'cover',
-              backgroundColor: '#000',
-            }}
-          />
-        )}
-
-        <div style={controlsStyle}>
+  return (
+    <div style={overlayStyle}>
+      <div style={modalStyle}>
+        <button onClick={onClose} style={closeButtonStyle}>✖</button>
+        <div style={cameraWrapperStyle}>
           {isCameraActive ? (
-            <>
-              <button
-                onClick={() => {
-                  handleClose();
-                }}
-                style={baseButtonStyle}
-                aria-label="Cancel and retake"
-              >
-                <img
-                  src="/back.png"
-                  alt="Kamera"
-                  style={{ height: '26px' }}
-                />  
-              </button>
-              <button
-                onClick={captureImage}
-                style={baseButtonStyle}
-                aria-label="Capture photo"
-              >
-                <img
-                  src="/camera.png"
-                  alt="Kamera"
-                  style={{ height: '24px' }}
-                />
-              </button>
-              <button
-                onClick={triggerFileInput}
-                style={baseButtonStyle}
-                aria-label="Upload from gallery"
-              >
-                <img
-                  src="/upload.png"
-                  alt="Kamera"
-                  style={{ height: '24px' }}
-                />
-              </button>
-            </>
+            <video ref={videoRef} autoPlay playsInline style={videoStyle} />
           ) : (
-            <>
-              <button
-                onClick={cancelCapture}
-                style={baseButtonStyle}
-                aria-label="Cancel and retake"
-              >
-                <img
-                  src="/back.png"
-                  alt="Kamera"
-                  style={{ height: '26px' }}
-                />  
-              </button>
-              <button
-                onClick={() => handleUploadImage(image)}
-                style={baseButtonStyle}
-                disabled={uploading}
-                aria-label={uploading ? 'Uploading...' : 'Confirm upload'}
-              >
-                <img
-                  src="/send.png"
-                  alt="Kamera"
-                  style={{ height: '24px' }}
-                />              </button>
-            </>
+            image && (
+              <img
+                src={image}
+                alt="Preview"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: isUploadedFile ? 'contain' : 'cover',
+                  background: '#000',
+                }}
+              />
+            )
           )}
         </div>
 
+        <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+
+        <div style={buttonGroupStyle}>
+          {isCameraActive ? (
+            <>
+              <button className={styles.buttonYellow} onClick={toggleFlash} style={flashButtonStyle}>
+                {flashOn ? "💡 Flash: ON" : "💡 Flash: OFF"}
+              </button>
+              <button className={styles.buttonGreen} onClick={captureImage} style={buttonStyle}>📸 Ambil</button>
+              <button className={styles.buttonGreen} onClick={triggerFileInput} style={buttonStyle}>🖼 Upload</button>
+            </>
+          ) : (
+            <>
+              <button className={styles.buttonGreen} onClick={resetCapture} style={buttonStyle}>🔁 Ulangi</button>
+              <button className={styles.buttonGreen} onClick={() => onUpload(image)} style={buttonStyle}>✅ Kirim</button>
+            </>
+          )}
+        </div>
+                
         <input
           ref={fileInputRef}
           type="file"
@@ -198,40 +136,38 @@ useEffect(() => {
           onChange={handleFileUpload}
         />
       </div>
-
-      <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
     </div>
   );
-
-  if (!isMobile) {
-    return (
-      <div style={desktopLayoutStyle}>
-        <div style={sidebarStyle}></div>
-        <div style={mainContentStyle}>{mainContent}</div>
-        <div style={sidebarStyle}></div>
-      </div>
-    );
-  }
-
-  return mainContent;
 };
 
-// Styles
-const containerStyle = {
-  position: 'absolute',
-  width: '100%',
-  height: '100%',
-  backgroundColor: '#000',
-  overflow: 'hidden',
-};
-
-const cameraContainerStyle = {
-  position: 'relative',
-  width: '100%',
-  height: '100%',
+const overlayStyle = {
+  position: 'fixed',
+  top: 0, left: 0, right: 0, bottom: 0,
+  backgroundColor: 'rgba(0,0,0,0.7)',
+  zIndex: 9999,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+};
+
+const modalStyle = {
+  backgroundColor: '#fefefe',
+  borderRadius: '16px',
+  overflow: 'hidden',
+  width: '90%',
+  maxWidth: '420px',
+  position: 'relative',
+  boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
+  fontFamily: '"Segoe UI", sans-serif',
+  paddingBottom: '1rem',
+};
+
+const cameraWrapperStyle = {
+  width: '100%',
+  height: '300px',
+  backgroundColor: '#000',
+  position: 'relative',
+  zIndex: 1,
 };
 
 const videoStyle = {
@@ -240,60 +176,41 @@ const videoStyle = {
   objectFit: 'cover',
 };
 
-const imageStyle = {
-  width: '100%',
-  height: '100%',
-};
-
-const controlsStyle = {
-  position: 'fixed',
-  bottom: '30px',
-  left: '50%',
-  transform: 'translateX(-50%)',
-  display: 'flex',
-  gap: '20px',
-  alignItems: 'center',
-};
-
-const baseButtonStyle = {
-  width: '60px',
-  height: '60px',
-  borderRadius: '50%',
+const closeButtonStyle = {
+  position: 'absolute',
+  top: '10px',
+  right: '10px',
+  background: 'transparent',
   border: 'none',
-  fontSize: '24px',
+  fontSize: '18px',
   cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-  transition: 'all 0.2s ease',
+  zIndex: 2,
 };
 
+const buttonGroupStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'space-evenly',
+  padding: '1rem 0.5rem 0 0.5rem',
+  gap: '10px',
+};
 
-const confirmButtonStyle = {
-  ...baseButtonStyle,
-  backgroundColor: '#4CAF50',
+const buttonStyle = {
+  padding: '0.6rem 1.2rem',
+  fontSize: '0.9rem',
+  border: 'none',
+  borderRadius: '8px',
+  cursor: 'pointer',
+  backgroundColor: '#28a745',
   color: '#fff',
+  transition: 'background-color 0.3s',
 };
 
-const desktopLayoutStyle = {
-  display: 'flex',
-  height: '100vh',
-  fontFamily: 'Arial, sans-serif',
-};
-
-const sidebarStyle = {
-  width: '250px',
-  backgroundColor: '#fff',
+const flashButtonStyle = {
+  ...buttonStyle,
+  backgroundColor: '#ffc107',
   color: '#333',
-  padding: '20px',
-  boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-  borderRight: '1px solid #e0e0e0',
 };
 
-const mainContentStyle = {
-  flex: 1,
-  position: 'relative',
-};
 
-export default CameraPage;
+export default CameraModal;
