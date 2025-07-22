@@ -39,7 +39,7 @@ const Dashboard = () => {
 
   const handleFiles = async (files) => {
     const filteredFiles = [];
-
+    console.log(files);
     for (const file of files) {
       const lowerName = file.name.toLowerCase();
       const nameWithoutExt = lowerName.replace(/\.[^/.]+$/, "");
@@ -99,7 +99,8 @@ const Dashboard = () => {
 
       // 3️⃣ Jika tidak ada yang sama persis, cari yang mirip
       const similarFile = fileList.find((f) => {
-        const serverName = f.json.Key.toLowerCase();
+        console.log(f);
+        const serverName = f.json?.Key?.toLowerCase();
         const serverNameWithoutExt = serverName.replace(/\.[^/.]+$/, "");
 
         return (
@@ -442,7 +443,7 @@ const Dashboard = () => {
     for (const key of selectedKeys) {
       try {
         const response = await fetch(
-          `https://bot.kediritechnopark.com/webhook/estetika-dev/files/download?key=${encodeURIComponent(
+          `https://auto.apps.kediritechnopark.com/webhook/estetika-dev/files/download?key=${encodeURIComponent(
             key
           )}`,
           {
@@ -487,7 +488,7 @@ const Dashboard = () => {
       formData.append("file", file, file.name);
 
       const response = await fetch(
-        "https://bot.kediritechnopark.com/webhook/estetika-dev/files/upload",
+        "https://auto.apps.kediritechnopark.com/webhook/estetika-dev/files/upload",
         {
           method: "POST",
           headers: {
@@ -535,7 +536,7 @@ const Dashboard = () => {
     for (const key of selectedKeys) {
       try {
         const response = await fetch(
-          `https://bot.kediritechnopark.com/webhook/estetika-dev/files/delete?key=${encodeURIComponent(
+          `https://auto.apps.kediritechnopark.com/webhook/estetika-dev/files/delete?key=${encodeURIComponent(
             key
           )}`,
           {
@@ -579,7 +580,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `https://bot.kediritechnopark.com/webhook/estetika-dev/files/push`,
+        `https://auto.apps.kediritechnopark.com/webhook/files/push`,
         {
           method: "POST",
           headers: {
